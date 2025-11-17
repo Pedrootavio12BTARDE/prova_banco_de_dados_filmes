@@ -7,5 +7,5 @@ CREATE TABLE filmesNew (
     genero VARCHAR(50) NOT NULL,
     duracao INT NOT NULL, -- duração em minutos
     classificacao VARCHAR(10) NOT NULL,
-     ano VARCHAR(50) NOT NULL
+     ano DATE NOT NULL
 );
