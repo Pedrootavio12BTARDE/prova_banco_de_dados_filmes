@@ -1,35 +1,49 @@
 async function carregarFilmes() {
-    const response = await fetch('http://localhost:3000/filmes');
-    const filmes = await response.json();
+    try {
+        // ✅ Usando a rota correta do backend
+        const response = await fetch('http://localhost:3000/filmes');
+        if (!response.ok) throw new Error('Erro ao buscar filmes');
 
-    let html = '<table><tr><th>ID</th><th>Nome</th><th>Gênero</th><th>Duração</th><th>Classificação</th><th>Ano</th><th>Ação</th></tr>';
+        const filmes = await response.json();
 
-    filmes.forEach(filme => {
-        // Formatando a data do banco YYYY-MM-DD → DD/MM/YYYY
-        const dataFormatada = new Date(filme.ano).toLocaleDateString("pt-BR");
+        let html = '<table border="1"><tr><th>ID</th><th>Nome</th><th>Gênero</th><th>Duração</th><th>Classificação</th><th>Ano</th><th>Ação</th></tr>';
 
-        html += `
-        <tr id="filme-${filme.id}">
-            <td>${filme.id}</td>
-            <td>${filme.nome}</td>
-            <td>${filme.genero}</td>
-            <td>${filme.duracao} min</td>
-            <td>${filme.classificacao}</td>
-            <td>${dataFormatada}</td>
-            <td><button class="btn-deletar" onclick="deletarFilme(${filme.id})">🗑️</button></td>
-        </tr>`;
-    });
+        filmes.forEach(filme => {
+            html += `
+                <tr id="filme-${filme.id}">
+                    <td>${filme.id}</td>
+                    <td>${filme.nome}</td>
+                    <td>${filme.genero}</td>
+                    <td>${filme.duracao}</td>
+                    <td>${filme.classificacao}</td>
+                    <td>${new Date(filme.ano).toISOString().split('T')[0]}</td>
+                    <td><button class="btn-deletar" onclick="deletarFilme(${filme.id})">🗑️</button></td>
+                </tr>
+            `;
+        });
 
-    html += '</table>';
-    document.getElementById('tabelaVendas').innerHTML = html;
+        html += '</table>';
+        document.getElementById('tabelaFilmes').innerHTML = html;
+    } catch (error) {
+        console.error(error);
+        document.getElementById('tabelaFilmes').textContent = 'Erro ao carregar filmes.';
+    }
 }
 
 async function deletarFilme(id) {
-    if (!confirm(`Excluir filme ID ${id}?`)) return;
+    if (!confirm(`Deseja excluir o filme ID ${id}?`)) return;
 
-    await fetch(`http://localhost:3000/filmes/${id}`, { method: 'DELETE' });
+    try {
+        // ✅ Usando a rota correta do backend
+        const response = await fetch(`http://localhost:3000/filmes/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Erro ao deletar filme');
 
-    document.getElementById(`filme-${id}`).remove();
+        document.getElementById(`filme-${id}`).remove();
+        alert('Filme excluído com sucesso!');
+    } catch (error) {
+        console.error(error);
+        alert('Erro ao excluir filme.');
+    }
 }
 
 window.onload = carregarFilmes;

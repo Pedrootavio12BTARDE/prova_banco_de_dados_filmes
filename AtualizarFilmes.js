@@ -18,7 +18,7 @@ async function carregarFilmes() {
     `;
 
     filmes.forEach(filme => {
-        const dataCorreta = filme.ano.split("T")[0];
+        const dataCorreta = filme.ano ? filme.ano.split("T")[0] : '';
 
         html += `
         <tr id="filme-${filme.id}">
@@ -59,7 +59,7 @@ function editarFilme(id) {
     document.getElementById(`c-${id}-3`).innerHTML =
         `<input id="i-${id}-3" value="${document.getElementById(`c-${id}-3`).textContent}">`;
 
-    const data = document.getElementById(`c-${id}-4`).getAttribute("data-val");
+    const data = document.getElementById(`c-${id}-4`).getAttribute("data-val") || '';
     document.getElementById(`c-${id}-4`).innerHTML =
         `<input type="date" id="i-${id}-4" value="${data}">`;
 
@@ -78,7 +78,7 @@ async function salvarFilme(id) {
             genero: document.getElementById(`i-${id}-1`).value,
             duracao: document.getElementById(`i-${id}-2`).value,
             classificacao: document.getElementById(`i-${id}-3`).value,
-            ano: document.getElementById(`i-${id}-4`).value // <-- NOME DA TABELA!!!
+            ano: document.getElementById(`i-${id}-4`).value
         })
     });
 
