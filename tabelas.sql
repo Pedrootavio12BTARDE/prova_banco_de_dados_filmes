@@ -9,3 +9,5 @@ CREATE TABLE filmesNew (
     classificacao VARCHAR(10) NOT NULL,
      ano DATE NOT NULL
 );
+
+SELECT * FROM  filmesNew;

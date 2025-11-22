@@ -7,7 +7,7 @@ document.getElementById('formFilme').addEventListener('submit', async function (
     const classificacao = document.getElementById('classificacao').value;
     const ano = document.getElementById('ano').value;  
 
-    const response = await fetch('http://localhost:3000/cadastroFilme', {
+    const response = await fetch('http://localhost:3000/filme', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome, genero, duracao, classificacao, ano })
