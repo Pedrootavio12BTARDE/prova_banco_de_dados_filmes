@@ -1,17 +1,22 @@
-async function carregarVendas() {
-    const response = await fetch('http://localhost:3000/vendaCombustivel');
-    const vendas = await response.json();
+async function carregarFilmes() {
+    const response = await fetch('http://localhost:3000/filmes');
+    const filmes = await response.json();
 
-    let html = '<table><tr><th>ID</th><th>Tipo de Combustível</th><th>Preço</th><th>Volume Abastecido</th><th>Data Abastecimento</th><th>Ação</th></tr>';
+    let html = '<table><tr><th>ID</th><th>Nome</th><th>Gênero</th><th>Duração</th><th>Classificação</th><th>Ano</th><th>Ação</th></tr>';
 
-    vendas.forEach(venda => {
-        html += `<tr id="venda-${venda.id}">
-        <td>${venda.id}</td>
-        <td>${venda.tipo_combustivel}</td>
-        <td>${venda.preco}</td>
-        <td>${venda.volume_abastecido}</td>
-        <td>${venda.data_abastecimento}</td>
-        <td><button class="btn-deletar" onclick="deletarVenda(${venda.id})">🗑️</button></td>
+    filmes.forEach(filme => {
+        // Formatando a data do banco YYYY-MM-DD → DD/MM/YYYY
+        const dataFormatada = new Date(filme.ano).toLocaleDateString("pt-BR");
+
+        html += `
+        <tr id="filme-${filme.id}">
+            <td>${filme.id}</td>
+            <td>${filme.nome}</td>
+            <td>${filme.genero}</td>
+            <td>${filme.duracao} min</td>
+            <td>${filme.classificacao}</td>
+            <td>${dataFormatada}</td>
+            <td><button class="btn-deletar" onclick="deletarFilme(${filme.id})">🗑️</button></td>
         </tr>`;
     });
 
@@ -19,11 +24,12 @@ async function carregarVendas() {
     document.getElementById('tabelaVendas').innerHTML = html;
 }
 
-async function deletarVenda(id) {
-    if (!confirm(`Excluir venda ID ${id}?`)) return;
+async function deletarFilme(id) {
+    if (!confirm(`Excluir filme ID ${id}?`)) return;
 
-    await fetch(`http://localhost:3000/vendaCombustivel/${id}`, { method: 'DELETE' });
-    document.getElementById(`venda-${id}`).remove();
+    await fetch(`http://localhost:3000/filmes/${id}`, { method: 'DELETE' });
+
+    document.getElementById(`filme-${id}`).remove();
 }
 
-window.onload = carregarVendas;
+window.onload = carregarFilmes;
